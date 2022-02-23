@@ -13,7 +13,7 @@ const TodoController = () => {
             const msg = document.getElementById('validation');
             if (isValid) {
                 console.log('isValid');
-                textAttr.setValue(t);
+                textAttr.setValue(convert(t));
                 msg.classList.add("display-none");
                 msg.innerHTML = '';
             } else {
@@ -107,7 +107,7 @@ const TodoItemsView = (todoController, rootElement) => {
             const msg = document.getElementById('validation');
             if(isValid){
                 console.log('isValid');
-                inputElement.value = todo.getText();
+                inputElement.value = convert(todo.getText());
                 msg.classList.add("display-none");
                 msg.innerHTML = '';
             } else {
