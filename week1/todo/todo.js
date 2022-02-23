@@ -5,7 +5,8 @@
 const TodoController = () => {
 
     const Todo = () => {                                // facade
-        const textAttr = Observable("text");            // we current don't expose it as we don't use it elsewhere
+        const textAttr = Observable("text");// we current don't expose it as we don't use it elsewhere
+        textAttr.onChange(t => console.log(t))
         const doneAttr = Observable(false);
         return {
             getDone:       doneAttr.getValue,
@@ -74,6 +75,7 @@ const TodoItemsView = (todoController, rootElement) => {
 
         checkboxElement.onclick = _ => todo.setDone(checkboxElement.checked);
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
+        // inputElement.setAttribute("onchange", this())
 
         todoController.onTodoRemove( (removedTodo, removeMe) => {
             if (removedTodo !== todo) return;
@@ -83,7 +85,24 @@ const TodoItemsView = (todoController, rootElement) => {
             removeMe();
         } );
 
-        todo.onTextChanged(() => inputElement.value = todo.getText());
+        todo.onTextChanged(() => {
+            console.log('onChangeText');
+            const isValid = validate('text', todo.getText());
+            const msg = document.getElementById('validation');
+            if(isValid){
+                console.log('isValid');
+                inputElement.value = todo.getText();
+                msg.classList.add("display-none");
+                msg.innerHTML = '';
+            } else {
+                console.log('isInvalid');
+                msg.classList.remove("display-none");
+                msg.innerHTML = isValid[1];
+            }
+        });
+
+
+
 
         rootElement.appendChild(deleteButton);
         rootElement.appendChild(inputElement);

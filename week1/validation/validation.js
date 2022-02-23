@@ -1,6 +1,4 @@
-// step 1: create two functions to convert and validate
-// step 2: apply these functions
-// step 3: show isValid
+// html Attribute, min max required.
 // step 4: generic implementation with a Validator and a Converter, holding a list of validations and a list of converter and elements where to apply
 
 // convert
@@ -10,19 +8,28 @@ const convert = value => {
 
 // validate
 const validate = (inputType, input) => {
-
     let isValid = [true, 'OK']
     const typeLength = []
     typeLength['text'] = [3, 20]
     typeLength['mail'] = [5, 25]
 
     if (input.length < typeLength[inputType][0]) {
-        isValid = [false, 'min length must be ' + typeLength[inputType][0] + ' for type ' + inputType]
-        return isValid;
+        isValid = [false, 'Es sind mindestens ' + typeLength[inputType][0] + ' Zeichen für Typ "' + inputType + '" nötig.']
+    } else if (input.length >= typeLength[inputType][1]) {
+        isValid = [false, 'Es sind maximal ' + typeLength[inputType][1] + ' Zeichen für Typ "' + inputType + '" möglich.']
     }
 
-    if (input.length >= typeLength[inputType][1]) {
-        isValid = [false, 'max length is ' + typeLength[inputType][1] + ' for type ' + inputType]
-    }
-    return isValid
+    return isValid;
+
+
+    // const msg = document.getElementById('validation');
+    // if (!isValid[0]) {
+    //     msg.classList.remove("display-none");
+    //     msg.innerHTML = isValid[1];
+    // } else {
+    //     msg.classList.add("display-none");
+    //     msg.innerHTML = '';
+    // }
 };
+
+bh

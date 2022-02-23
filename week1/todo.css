@@ -42,3 +42,11 @@ input[type=text]:focus {
     color: red;
     font-size: 1.3em;
 }
+
+.validation{
+
+}
+
+.display-none{
+    display: none;
+}
