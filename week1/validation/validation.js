@@ -1,6 +1,3 @@
-// html Attribute, min max required.
-// step 4: generic implementation with a Validator and a Converter, holding a list of validations and a list of converter and elements where to apply
-
 // convert
 const convert = value => {
     return value.toUpperCase();
@@ -20,16 +17,4 @@ const validate = (inputType, input) => {
     }
 
     return isValid;
-
-
-    // const msg = document.getElementById('validation');
-    // if (!isValid[0]) {
-    //     msg.classList.remove("display-none");
-    //     msg.innerHTML = isValid[1];
-    // } else {
-    //     msg.classList.add("display-none");
-    //     msg.innerHTML = '';
-    // }
 };
-
-bh

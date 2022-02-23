@@ -6,7 +6,23 @@ const TodoController = () => {
 
     const Todo = () => {                                // facade
         const textAttr = Observable("text");// we current don't expose it as we don't use it elsewhere
-        textAttr.onChange(t => console.log(t))
+        // variante 1
+        textAttr.onChange(t => {
+            console.log('onChanged');
+            const isValid = validate('text', t);
+            const msg = document.getElementById('validation');
+            if (isValid) {
+                console.log('isValid');
+                textAttr.setValue(t);
+                msg.classList.add("display-none");
+                msg.innerHTML = '';
+            } else {
+                console.log('isInvalid');
+                msg.classList.remove("display-none");
+                msg.innerHTML = isValid[1];
+            }
+        })
+
         const doneAttr = Observable(false);
         return {
             getDone:       doneAttr.getValue,
@@ -75,7 +91,6 @@ const TodoItemsView = (todoController, rootElement) => {
 
         checkboxElement.onclick = _ => todo.setDone(checkboxElement.checked);
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
-        // inputElement.setAttribute("onchange", this())
 
         todoController.onTodoRemove( (removedTodo, removeMe) => {
             if (removedTodo !== todo) return;
@@ -85,8 +100,9 @@ const TodoItemsView = (todoController, rootElement) => {
             removeMe();
         } );
 
+        // variante 2
         todo.onTextChanged(() => {
-            console.log('onChangeText');
+            console.log('onTextChanged');
             const isValid = validate('text', todo.getText());
             const msg = document.getElementById('validation');
             if(isValid){
@@ -100,9 +116,6 @@ const TodoItemsView = (todoController, rootElement) => {
                 msg.innerHTML = isValid[1];
             }
         });
-
-
-
 
         rootElement.appendChild(deleteButton);
         rootElement.appendChild(inputElement);
