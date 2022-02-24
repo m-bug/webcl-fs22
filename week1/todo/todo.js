@@ -53,10 +53,12 @@ const TodoController = () => {
         if (input.value.length < min || input.value.length > max || regex.test(input.value)) {
             console.log("invalid!");
             input.style.color = 'red';
+            return "ungültige Eingabe";
         } else{
             console.log("valid!");
             input.style.color = 'darkblue';
             input.value = convert(input.value);
+            return input.value;
         }
     };
 
@@ -98,10 +100,8 @@ const TodoItemsView = (todoController, rootElement) => {
 
         checkboxElement.onclick = _ => todo.setDone(checkboxElement.checked);
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
-        inputElement.oninput = _ => todoController.validate(inputElement); // binding von view zu controller
+        inputElement.onchange = _ => todo.setText(todoController.validate(inputElement)); // binding von view zu controller --> set text to model
 
-        // todo dk: wenn der Benutzer den text im inputElement ändert,
-        // wie kommt der neue Text ins model?
 
 
         todoController.onTodoRemove( (removedTodo, removeMe) => {
