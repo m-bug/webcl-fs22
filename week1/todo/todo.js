@@ -7,19 +7,19 @@ const TodoController = () => {
     const Todo = () => {                                // facade
         const textAttr = Observable("text");// we current don't expose it as we don't use it elsewhere
         // variante 1
-        textAttr.onChange(t => {
+        textAttr.onChange(t => { // TODO dk: dieses binding gehört nicht ins model, sondern in den controller (später: in den projector)
             console.log('onChanged');
             const isValid = validate('text', t);
-            const msg = document.getElementById('validation');
+            const msg = document.getElementById('validation'); // todo dk: Zugriff auf den View brrrrrrr.....
             if (isValid) {
                 console.log('isValid');
-                textAttr.setValue(convert(t));
-                msg.classList.add("display-none");
-                msg.innerHTML = '';
+                textAttr.setValue(convert(t)); // todo dk: hm, löst das nicht wieder einen onChange aus? ...
+                msg.classList.add("display-none");// todo dk: Zugriff auf den View brrrrrrr....
+                msg.innerHTML = '';// todo dk: Zugriff auf den View brrrrrrr....
             } else {
                 console.log('isInvalid');
-                msg.classList.remove("display-none");
-                msg.innerHTML = isValid[1];
+                msg.classList.remove("display-none");// todo dk: Zugriff auf den View brrrrrrr....
+                msg.innerHTML = isValid[1];// todo dk: Zugriff auf den View brrrrrrr....
             }
         })
 
@@ -28,7 +28,7 @@ const TodoController = () => {
             getDone:       doneAttr.getValue,
             setDone:       doneAttr.setValue,
             onDoneChanged: doneAttr.onChange,
-            setText:       textAttr.setValue,
+            setText:       textAttr.setValue, // todo dk: wo rufen Sie das auf?
             getText:       textAttr.getValue,
             onTextChanged: textAttr.onChange,
         }
@@ -92,6 +92,10 @@ const TodoItemsView = (todoController, rootElement) => {
         checkboxElement.onclick = _ => todo.setDone(checkboxElement.checked);
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
 
+        // todo dk: wenn der Benutzer den text im inputElement ändert,
+        // wie kommt der neue Text ins model?
+
+
         todoController.onTodoRemove( (removedTodo, removeMe) => {
             if (removedTodo !== todo) return;
             rootElement.removeChild(inputElement);
@@ -104,7 +108,7 @@ const TodoItemsView = (todoController, rootElement) => {
         todo.onTextChanged(() => {
             console.log('onTextChanged');
             const isValid = validate('text', todo.getText());
-            const msg = document.getElementById('validation');
+            const msg = document.getElementById('validation'); // todo dk: you have just created the view above. Here you could use it.
             if(isValid){
                 console.log('isValid');
                 inputElement.value = convert(todo.getText());
