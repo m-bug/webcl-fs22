@@ -2,33 +2,18 @@
 // requires ./fortuneService.js
 // requires ../dataflow/dataflow.js
 
+// controller
 const TodoController = () => {
 
+    // model
     const Todo = () => {                                // facade
         const textAttr = Observable("text");// we current don't expose it as we don't use it elsewhere
-        // variante 1
-        textAttr.onChange(t => { // TODO dk: dieses binding gehört nicht ins model, sondern in den controller (später: in den projector)
-            console.log('onChanged');
-            const isValid = validate('text', t);
-            const msg = document.getElementById('validation'); // todo dk: Zugriff auf den View brrrrrrr.....
-            if (isValid) {
-                console.log('isValid');
-                textAttr.setValue(convert(t)); // todo dk: hm, löst das nicht wieder einen onChange aus? ...
-                msg.classList.add("display-none");// todo dk: Zugriff auf den View brrrrrrr....
-                msg.innerHTML = '';// todo dk: Zugriff auf den View brrrrrrr....
-            } else {
-                console.log('isInvalid');
-                msg.classList.remove("display-none");// todo dk: Zugriff auf den View brrrrrrr....
-                msg.innerHTML = isValid[1];// todo dk: Zugriff auf den View brrrrrrr....
-            }
-        })
-
         const doneAttr = Observable(false);
         return {
             getDone:       doneAttr.getValue,
             setDone:       doneAttr.setValue,
             onDoneChanged: doneAttr.onChange,
-            setText:       textAttr.setValue, // todo dk: wo rufen Sie das auf?
+            setText:       textAttr.setValue,
             getText:       textAttr.getValue,
             onTextChanged: textAttr.onChange,
         }
@@ -59,6 +44,27 @@ const TodoController = () => {
         );
     };
 
+    // validate feature
+    const validate = (input) => {
+        const min = 3;
+        const max = 25;
+        const regex = new RegExp("[^a-zA-Z09 ]"); // wenn ein char nicht in dieser range -> true
+
+        if (input.value.length < min || input.value.length > max || regex.test(input.value)) {
+            console.log("invalid!");
+            input.style.color = 'red';
+        } else{
+            console.log("valid!");
+            input.style.color = 'darkblue';
+            input.value = convert(input.value);
+        }
+    };
+
+    // convert feature
+    const convert = value => {
+        return value.toUpperCase();
+    };
+
     return {
         numberOfTodos:      todoModel.count,
         numberOfopenTasks:  () => todoModel.countIf( todo => ! todo.getDone() ),
@@ -68,12 +74,13 @@ const TodoController = () => {
         onTodoAdd:          todoModel.onAdd,
         onTodoRemove:       todoModel.onDel,
         removeTodoRemoveListener: todoModel.removeDeleteListener, // only for the test case, not used below
+        validate:           validate,
+        convert:            convert
     }
 };
 
-
+// Views
 // View-specific parts
-
 const TodoItemsView = (todoController, rootElement) => {
 
     const render = todo => {
@@ -91,6 +98,7 @@ const TodoItemsView = (todoController, rootElement) => {
 
         checkboxElement.onclick = _ => todo.setDone(checkboxElement.checked);
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
+        inputElement.oninput = _ => todoController.validate(inputElement); // binding von view zu controller
 
         // todo dk: wenn der Benutzer den text im inputElement ändert,
         // wie kommt der neue Text ins model?
@@ -104,22 +112,8 @@ const TodoItemsView = (todoController, rootElement) => {
             removeMe();
         } );
 
-        // variante 2
-        todo.onTextChanged(() => {
-            console.log('onTextChanged');
-            const isValid = validate('text', todo.getText());
-            const msg = document.getElementById('validation'); // todo dk: you have just created the view above. Here you could use it.
-            if(isValid){
-                console.log('isValid');
-                inputElement.value = convert(todo.getText());
-                msg.classList.add("display-none");
-                msg.innerHTML = '';
-            } else {
-                console.log('isInvalid');
-                msg.classList.remove("display-none");
-                msg.innerHTML = isValid[1];
-            }
-        });
+        todo.onTextChanged(() => inputElement.value = todo.getText());
+
 
         rootElement.appendChild(deleteButton);
         rootElement.appendChild(inputElement);
