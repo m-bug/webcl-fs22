@@ -102,8 +102,6 @@ const TodoItemsView = (todoController, rootElement) => {
         deleteButton.onclick    = _ => todoController.removeTodo(todo);
         inputElement.onchange = _ => todo.setText(todoController.validate(inputElement)); // binding von view zu controller --> set text to model
 
-
-
         todoController.onTodoRemove( (removedTodo, removeMe) => {
             if (removedTodo !== todo) return;
             rootElement.removeChild(inputElement);
