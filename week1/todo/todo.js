@@ -52,7 +52,7 @@ const TodoController = () => {
 
         if (input.value.length < min || input.value.length > max || regex.test(input.value)) {
             console.log("invalid!");
-            input.style.color = 'red';
+            input.style.color = 'red'; // gemäss CSS Schmankerl von D. König: an dieser stelle die Pseudoklasse "invalid" setzen.
             return "ungültige Eingabe";
         } else{
             console.log("valid!");
