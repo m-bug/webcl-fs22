@@ -45,3 +45,37 @@ input[type=text]:focus {
 input.invalid {
     color: red;
 }
+
+.bar-filled {
+    display: block;
+    height: 30px;
+    width:  100px;
+    max-width: 100px;
+    border-style: dashed;
+}
+
+.bar-all-filled {
+    background-color: cornflowerblue;
+}
+
+.bar-open-filled {
+    background-color: indianred;
+}
+.bar-done-filled {
+    background-color: forestgreen;
+}
+
+.chart {
+    height: 500px;
+    width: 100%;
+    background:  #eee;
+    padding: 15px 10px 0px 10px;
+}
+
+.bar {
+    float: left;
+    width: 33.33333%;
+    padding: 20px;
+    background: #eee;
+    box-sizing: border-box;
+}

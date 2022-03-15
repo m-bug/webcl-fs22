@@ -1,10 +1,10 @@
 import { ObservableList }           from "../observable/observable.js";
 import { Attribute, VALID, VALUE }  from "../presentationModel/presentationModel.js";
-import { todoItemProjector }        from "./todoProjector.js";
+import {todoChartProjector, todoItemProjector} from "./todoProjector.js";
 import { Scheduler }                from "../dataflow/dataflow.js";
 import { fortuneService }           from "./fortuneService.js";
 
-export { TodoController, TodoItemsView, TodoTotalView, TodoOpenView}
+export { TodoController, TodoItemsView, TodoTotalView, TodoOpenView, ChartView}
 
 const TodoController = () => {
 
@@ -95,6 +95,25 @@ const TodoOpenView = (todoController, numberOfOpenTasksElement) => {
     const render = () =>
         numberOfOpenTasksElement.innerText = "" + todoController.numberOfopenTasks();
 
+    // binding
+
+    todoController.onTodoAdd(todo => {
+        render();
+        todo.onDoneChanged(render);
+    });
+    todoController.onTodoRemove(render);
+};
+
+const ChartView = (todoController, rootElement) => {
+
+    const render = () => {
+
+        const open = todoController.numberOfopenTasks(); // get open tasks
+        const n = todoController.numberOfTodos(); // get all tasks
+
+        todoChartProjector(todoController, rootElement, n, open)
+
+    }
     // binding
 
     todoController.onTodoAdd(todo => {
