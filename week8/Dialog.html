@@ -16,6 +16,15 @@
             margin: 3em;
         }
 
+        dialog::backdrop {
+            background: black;
+            opacity: 0.7;
+        }
+
+        dialog {
+            border-radius: .5em;
+        }
+
 
     </style>
 </head>
@@ -24,7 +33,7 @@
 <main>
 
 
-    <dialog id="favDialog">
+    <dialog id="favDialog" >
       <form method="dialog">
         <p><label>Favorite animal:
           <select>
